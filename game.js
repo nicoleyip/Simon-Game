@@ -6,6 +6,7 @@ var index = 0;
 
 var buttonColor = ["red", "blue", "green", "yellow"];
 
+// detect the keypress event to start the game
 $(document).keydown(function() {
   if(gameStarted === false) {
     $("#level-title").text("Level " + level);
@@ -15,21 +16,33 @@ $(document).keydown(function() {
   }
 });
 
+// detect the mouse click event to start the game
+$(document).on("click", function(e) {
+  if(gameStarted === false) {
+    $("#level-title").text("Level " + level);
+    $(".suggestion").addClass("hide");
+    nextSequence();
+    gameStarted = true;
+  }
+});
+
+// provents the propagation
+$(".btn").on("click", function(e) {
+  e.stopPropagation();
+});
+
+// click buttons to play the game
 $(".btn").click(function() {
   var userChosenColor = $(this).attr("id");
   userClickedPattern.push(userChosenColor);
   playSound(userChosenColor);
   animatePress(userChosenColor);
-  //nextSequence();
   checkAnswer(level);
 });
 
 function checkAnswer(currentLevel) {
-  console.log("level" + level);
   if(userClickedPattern[index] === gamePattern[index]) {
-    console.log("success");
     ++index;
-    console.log("index" + index);
     if(index == level) {
       setTimeout(function() {
         nextSequence();
